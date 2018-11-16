@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Implementation of a Flow-sensitive Pointer Analysis}
+\author{Shiry Hassan  200175016}
+\date{August 2017}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction} I choose to implement a flow sensitive pointer analysis.
+
+\section{Implementation} I implemented a new package called pa.\\
+Pa contains classes as PaDomain, PaState, PaMain, PaFactoid and more classes for the transformers.
+
+\subsection{PaFactoid} The object represent a points-to-vertex.\\
+The edge can be represented with a label or without.\\
+So I support both when x = y or for example x.f = y (when there is no field, it is initialized to null).
+
+\subsection{PaDomain}
+$[x = null] \ \ \ Remove \ (x) \bigcup \ (x = null)$\\
+$[x.f = null]\ \ \ Remove \ (x) \bigcup \ $(find x.f factoid and update $x.f= null)$\\
+$[x = y]\ \ \ Remove \ (x) \bigcup \ (x = y)$\\
+$[x = y.f]\ \ \ Remove \ (x) \bigcup \ $ find y.f factoid and $x = y.f null)$\\
+$[x = new T]\ \ \ Remove \ (x) \bigcup \ (x =  new T)$
+$[x.f = y]\ \ \ Remove \ (x) \bigcup \ $(find x.f factoid and update $x.f= y)$\\\\
+leq(PaState first, PaState second)\\
+Returns true if second states contains all first states and false otherwise.\\\\
+ub(PaState first, PaState second)\\
+Returns the join of the two states (weak update). 
+
+
+
+\subsection{PaState}
+Inherits parents methods.\\
+(Tried to override toString() but unsuccessfully)
+
+\subsection{PaMain} In a similar way to the cp main.
+
+\section{Testing}
+	public int checkLocalToLocal(Integer a, Integer b, Integer c)\\
+	
+    a = new Integer(1);     a = labelnew0\\
+        
+		b = new Integer(2);        b = labelnew1\\
+		
+		$if(a == c)$\\
+		
+			
+			$c = a;$                    // c points to     labelnew0\\
+		
+		    $if(b == c)$\\
+		
+		
+			$c = b;	   $         // c points to labelnew1\\
+			
+		return c;
+
+\section{Conclusion}
+ The analysis is precise when it is a Strong update.\\ When it's sure which one to exchange with the updated state it is  must-point-to query.\\ We can see it along the transformers except for x.f = y when x can has other fields so it is a weak update.\\ It's a may alias query when there are some more than one field for x and join the those states.
+ 
+ 
+ \section*{Questionnaire (optional)}
+Please provide feedback for this assignment:
+\begin{enumerate}
+\item \textbf{Q:} Was this assignment useful for understanding the material?
+
+      \textbf{A:} Yes sure, it makes more sense when you implement it.\\ Also I got to practise java and computing. 
+
+\item \textbf{Q:} How much time did you spend on this assignment?
+
+      \textbf{A:} About 50 hours.
+
+\item \textbf{Q:} How hard would you say this assignment was: trivial/easy/okay/hard/very challenging?
+
+      \textbf{A:} I think it was okay it wasn't easy but not too hard.\\ It took sometime to understand what I am suppose to do, but as I understood it wasn't hard.
+\item \textbf{Q:} Any comments/suggestions for the course so far?
+
+      \textbf{A:} 
+
+\end{enumerate}
+ 
+
+\end{document}
